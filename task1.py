@@ -32,8 +32,8 @@ if __name__ == "__main__":
     
     argparser = argparse.ArgumentParser(description="Download Sentinel-2 data from Sentinel Hub.")
     argparser.add_argument("--aoi", type=str, help="Path to GeoJSON file defining the area of interest. Please define path from project root.", default="data/input/AOI_for_test.geojson")
-    argparser.add_argument("--start-date", type=str, help="Start date in YYYY-MM-DD format", default="2025-08-01")
-    argparser.add_argument("--end-date", type=str, help="End date in YYYY-MM-DD format", default="2025-08-31")
+    argparser.add_argument("--start", type=str, help="Start date in YYYY-MM-DD format", default="2025-08-01")
+    argparser.add_argument("--end", type=str, help="End date in YYYY-MM-DD format", default="2025-08-31")
     argparser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose output", default=False)
     args = argparser.parse_args()
     
