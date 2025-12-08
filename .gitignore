@@ -1,3 +1,10 @@
+data/raw/*
+!data/raw/.gitkeep
+data/input/*
+!data/input/AOI_for_test.geojson
+data/output/*
+!data/output/.gitkeep
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
