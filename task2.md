@@ -76,11 +76,15 @@ Once the s3 bucket has a suitable configuration, and the images have been conver
 There are two options for creating a collection, either through Sentinel Hub's Dashboard interface, or through the python API. The latter, provides better leverage if several collections need to be created, or the collections need to be updated often. However, in this guide, we will focus on the Dashboard interface, given its ease of use. For more information about how to use the python API, please check the following [example](https://sentinelhub-py.readthedocs.io/en/latest/examples/byoc_request.html#BYOC-collections).
 
 You can easily create a new collection in the [My Collections](https://apps.sentinel-hub.com/dashboard/#/collections/collection/new) section of the Sentinel Hub Dashboard. You can use the configuration presented in the following screenshot:
+
 ![collection dashboard screen](docs/new_collection_dashboard.png)
+
 The type of collection is BYOC, and the location must coincide with the region where your s3 bucket is hosted. Once the collection has been created, you can access it in the My Collections section of the Dashboard.
 
 Optionally, you can configure the collection's bands to your convenience. If bands are not configured, the BYOC service will automatically configure them based on the files of the first ingested tile. If you wish to configure them manually, you can do so by accessing the newly created collection in the Dashboard:
+
 ![collection configure bands screen](docs/configure_bands_dashboard.png)
+
 The configurable parameters are:
 - Band name: name of the band that you will use to query for this band in your evalscript. 
 - Bit Depth: number of bits used to represent the possible values in the band.
@@ -96,7 +100,9 @@ Similarly to the previous step, the ingestion of tiles can be done intuitively t
 > As described in the previous section, a BYOC collection is a group of tiles with the same bands. Therefore, when ingesting data into your collection, all tiles must contain the same set of files (they must share the same structure), or the ingest will fail.
 
 In the case of the Dashboard, only one tile can be added at a time. To do so, you can browse your collection in the My Collections section, click on the Tiles subsection and, finally, click on the green " + Add tile " button. You will open the following dialog:
+
 ![add tile screen](docs/add_tile_dashboard.png)
+
 In the Path field, you must specify the path inside the s3 bucket where all COG files for this tile are stored. Optionally, you can also include the sensing time of the tile.
 
 Since the archive has a size of 50TB, making use of the python Sentinel Hub API could be a more convenient way to ingest the tiles. In the following, there is a pseudocode of BYOC tile ingestion in python:
