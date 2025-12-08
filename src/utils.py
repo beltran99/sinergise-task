@@ -12,13 +12,13 @@ from sentinelhub import BBox, CRS, bbox_to_dimensions
 from src import RESOLUTION, MAX_TILE_SIZE
 
 def get_AOI_shape(aoi_path: Path) -> shape:
-    """_summary_
+    """Reads a GeoJSON file and returns a geometry object.
 
     Args:
-        aoi_path (Path): _description_
+        aoi_path (Path): Path to the GeoJSON file defining the area of interest.
 
     Returns:
-        shape: _description_
+        shape: Resulting geometry object.
     """
     with open(aoi_path) as f:
         gj = geojson.load(f)
@@ -26,13 +26,13 @@ def get_AOI_shape(aoi_path: Path) -> shape:
     return shape(gj)
 
 def geojson_to_bbox(geojson_path: Path) -> list[float]:
-    """_summary_
+    """Reads a GeoJSON file and returns its bounding box in [minx, miny, maxx, maxy] format.
 
     Args:
-        geojson_path (Path): _description_
+        geojson_path (Path): Path to the GeoJSON file defining the area of interest.
 
     Returns:
-        list[float]: _description_
+        list[float]: Bounding box in [minx, miny, maxx, maxy] format.
     """
     shape_obj = get_AOI_shape(geojson_path)
     minx, miny, maxx, maxy = shape_obj.bounds
@@ -40,15 +40,15 @@ def geojson_to_bbox(geojson_path: Path) -> list[float]:
     return [minx, miny, maxx, maxy]
 
 def get_number_of_tiles(bbox: BBox, resolution: int = RESOLUTION, max_size: int = MAX_TILE_SIZE) -> tuple[int, int]:
-    """_summary_
+    """Computes the number of tiles needed to cover the given bounding box, resolution and maximum tile size.
 
     Args:
-        bbox (BBox): _description_
-        resolution (int, optional): _description_. Defaults to RESOLUTION.
-        max_size (int, optional): _description_. Defaults to MAX_TILE_SIZE.
+        bbox (BBox): Bounding box object defining the area of interest.
+        resolution (int, optional): Resolution in meters. Defaults to RESOLUTION.
+        max_size (int, optional): Maximum tile size in pixels. Defaults to MAX_TILE_SIZE.
 
     Returns:
-        tuple[int, int]: _description_
+        tuple[int, int]: Number of tiles needed in the x and y directions.
     """
     bbox_size = bbox_to_dimensions(bbox, resolution=resolution)
     nx = math.ceil(bbox_size[0] / max_size)
@@ -57,14 +57,14 @@ def get_number_of_tiles(bbox: BBox, resolution: int = RESOLUTION, max_size: int 
     return nx, ny
 
 def merge_tiles(download_responses: list, bbox: BBox) -> MemoryFile:
-    """_summary_
+    """Reads into memory the downloaded tiles and merges them into a single in-memory raster mosaic.
 
     Args:
-        download_responses (list): _description_
-        bbox (BBox): _description_
+        download_responses (list): List of tile download responses from Sentinel Hub API.
+        bbox (BBox): Bounding box object defining the area of interest.
 
     Returns:
-        MemoryFile: _description_
+        MemoryFile: In-memory raster mosaic of the merged tiles.
     """
     datasets = []
     for download_response in download_responses:
@@ -92,14 +92,14 @@ def merge_tiles(download_responses: list, bbox: BBox) -> MemoryFile:
     return memfile
 
 def has_dates_around_target(dates: list[dt.datetime], target: dt.datetime) -> bool:
-    """_summary_
+    """Checks if in the given list there are dates both before and after a target date.
 
     Args:
-        dates (list[dt.datetime]): _description_
-        target (dt.datetime): _description_
+        dates (list[dt.datetime]): List of datetime objects.
+        target (dt.datetime): Target datetime object.
 
     Returns:
-        bool: _description_
+        bool: True if there are dates both before and after the target date, False otherwise.
     """
     has_smaller = any(d < target for d in dates)
     has_larger = any(d > target for d in dates)
@@ -107,14 +107,14 @@ def has_dates_around_target(dates: list[dt.datetime], target: dt.datetime) -> bo
     return has_smaller and has_larger
     
 def get_dekadal_targets(start_date: dt.datetime, end_date: dt.datetime) -> list[str]:
-    """_summary_
+    """Computes a list of dekadal target dates (1st, 11th, and 21st of each month) within a given time interval.
 
     Args:
-        start_date (dt.datetime): _description_
-        end_date (dt.datetime): _description_
+        start_date (dt.datetime): Start datetime object of the interval.
+        end_date (dt.datetime): End datetime object of the interval.
 
     Returns:
-        list[str]: _description_
+        list[str]: List of dekadal target dates in the interval.
     """
     targets = []
     year, month = start_date.year, start_date.month
