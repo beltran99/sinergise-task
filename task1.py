@@ -41,7 +41,7 @@ if __name__ == "__main__":
     aoi_path = ROOT_DIR / args.aoi
     bbox = geojson_to_bbox(aoi_path)
     bbox = BBox(bbox=bbox, crs=CRS.WGS84)
-    time_interval = (args.start_date, args.end_date)
+    time_interval = (args.start, args.end)
     
     # Set up logger
     logging_level = logging.INFO
