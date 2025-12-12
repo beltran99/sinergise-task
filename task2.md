@@ -1,4 +1,4 @@
-In order to make custom datasets available in the Copernicus data browser, the data can be onboarded via the Sentinel Hub "Bring Your Own COG" (BYOC) API. This document presents a detailed step-by-step guide on how to efficiently onboard your data. The following are the main steps described in this guide:
+In order to make custom datasets available in the Copernicus data browser, the data can be onboarded via the "Bring Your Own COG" (BYOC) API. This document presents a detailed step-by-step guide on how to efficiently onboard your data. The following are the main steps described in this guide:
 - [1. Configure s3 bucket](#1-configure-s3-bucket)
   - [Sync s3 to same region as BYOC](#sync-s3-to-same-region-as-byoc)
   - [Update bucket policy](#update-bucket-policy)
@@ -73,9 +73,9 @@ export CPL_VSIL_USE_TEMP_FILE_FOR_RANDOM_WRITE=YES
 # 3. Create collection
 Once the s3 bucket has a suitable configuration, and the images have been converted to the right format, you can create your BYOC collection. Conceptually, a BYOC collection is a collections of tiles. Each tile needs to contain a set of bands and, optionally, an acquisition date and time.
 
-There are two options for creating a collection, either through Sentinel Hub's Dashboard interface, or through the python API. The latter, provides better leverage if several collections need to be created, or the collections need to be updated often. However, in this guide, we will focus on the Dashboard interface, given its ease of use. For more information about how to use the python API, please check the following [example](https://sentinelhub-py.readthedocs.io/en/latest/examples/byoc_request.html#BYOC-collections).
+There are two options for creating a collection, either through the Dashboard interface, or through the python API. The latter, provides better leverage if several collections need to be created, or the collections need to be updated often. However, in this guide, we will focus on the Dashboard interface, given its ease of use. For more information about how to use the python API, please check the following [example](https://sentinelhub-py.readthedocs.io/en/latest/examples/byoc_request.html#BYOC-collections).
 
-You can easily create a new collection in the [My Collections](https://apps.sentinel-hub.com/dashboard/#/collections/collection/new) section of the Sentinel Hub Dashboard. You can use the configuration presented in the following screenshot:
+You can easily create a new collection in the My Collections section of the Dashboard. You can use the configuration presented in the following screenshot:
 
 ![collection dashboard screen](docs/new_collection_dashboard.png)
 
@@ -105,7 +105,7 @@ In the case of the Dashboard, only one tile can be added at a time. To do so, yo
 
 In the Path field, you must specify the path inside the s3 bucket where all COG files for this tile are stored. Optionally, you can also include the sensing time of the tile.
 
-Since the archive has a size of 50TB, making use of the python Sentinel Hub API could be a more convenient way to ingest the tiles. In the following, there is a pseudocode of BYOC tile ingestion in python:
+Since the archive has a size of 50TB, making use of the python API could be a more convenient way to ingest the tiles. In the following, there is a pseudocode of BYOC tile ingestion in python:
 ```python
 # Setup sentinelhub configuration
 SH_CLIENT_ID = "SH_CLIENT_ID"
