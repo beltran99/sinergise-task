@@ -1,7 +1,9 @@
+import json
 import math
 import datetime as dt
 import calendar
 from pathlib import Path
+from typing import Literal
 
 import geojson
 from shapely.geometry import shape
@@ -56,11 +58,12 @@ def get_number_of_tiles(bbox: BBox, resolution: int = RESOLUTION, max_size: int 
     
     return nx, ny
 
-def merge_tiles(download_responses: list, bbox: BBox) -> MemoryFile:
+def merge_tiles(download_responses: list, response_type: Literal["sentinel", "CLMS"], bbox: BBox) -> MemoryFile:
     """Reads into memory the downloaded tiles and merges them into a single in-memory raster mosaic.
 
     Args:
         download_responses (list): List of tile download responses from Sentinel Hub API.
+        response_type (Literal["sentinel", "CLMS"]): Type of the downloaded response, either 'sentinel' or 'CLMS'.
         bbox (BBox): Bounding box object defining the area of interest.
 
     Returns:
@@ -69,8 +72,13 @@ def merge_tiles(download_responses: list, bbox: BBox) -> MemoryFile:
     datasets = []
     for download_response in download_responses:
         memfile = MemoryFile(download_response.content)
-        width = download_response.request.post_values['output']['width']
-        height = download_response.request.post_values['output']['height']
+        width, height = None, None
+        if response_type == "sentinel":
+            width = download_response.request.post_values['output']['width']
+            height = download_response.request.post_values['output']['height']
+        elif response_type == "CLMS":
+            width = json.loads(download_response.request.body.decode('utf-8'))['output']['width']
+            height = json.loads(download_response.request.body.decode('utf-8'))['output']['height']
         ds = memfile.open(width=width, height=height, crs='EPSG:4326')
         datasets.append(ds)
     

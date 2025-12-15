@@ -1,7 +1,7 @@
 import argparse
 import logging
 from pathlib import Path
-from sentinelhub import BBox, CRS
+from sentinelhub import BBox, CRS, SHConfig
 
 from src.utils import geojson_to_bbox
 from src.logger import get_logger
@@ -23,10 +23,9 @@ def execute_pipeline(bbox: BBox, time_interval: tuple[str, str], aoi: Path, logg
     # 1. Extract data through Sentinel Hub API according to defined criteria
     xarrays, target_times = extract(bbox, time_interval, aoi, logger)
     # 2. Transform the extracted data into a composite time series
-    composite = transform(xarrays, target_times, logger)
+    composite = transform(xarrays, target_times, aoi, bbox, logger)
     # 3. Save the output composite time series to the desired destination and format
     load(composite, logger)
-
 
 if __name__ == "__main__":
     

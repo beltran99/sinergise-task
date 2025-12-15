@@ -1,6 +1,12 @@
 {
     "sentinelhub": {
-        "client_id": "",
-        "client_secret": ""
+        "client_id": "sh_client_id",
+        "client_secret": "sh_client_secret"
+    },
+    "cdse": {
+        "client_id": "cdse_client_id",
+        "client_secret": "cdse_client_secret",
+        "base_url": "https://sh.dataspace.copernicus.eu/api/v1/",
+        "token_url": "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token"
     }
 }
