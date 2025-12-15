@@ -64,12 +64,18 @@ def transform(ndvi_xarrays: list[xr.DataArray], target_times: np.ndarray, aoi: P
     logger.info("Creating Maximum Value Composite (MVC) for each dekadal period...")
     
     mvc = None
+    gaps = []
     for i, target in enumerate(target_times):
         
         masked_arr_l = ndvi.where((ndvi.time < target) & (ndvi.time > target - np.timedelta64(10,'D')), drop=True)
         masked_arr_r = ndvi.where((ndvi.time > target) & (ndvi.time < target + np.timedelta64(10,'D')), drop=True)
+        
+        # Check for gaps in the dekadal composite
+        if len(masked_arr_l.time.values) == 0 or len(masked_arr_r.time.values) == 0:
+            logger.info(f"Gap detected for dekadal {str(target.astype('datetime64[D]'))}. Will attempt to fill using CLMS data.")
+            gaps.append(target)
                 
-        logger.info(f"Using {[str(t.astype('datetime64[D]')) for t in masked_arr_l.time.values]} and {[str(t.astype('datetime64[D]')) for t in masked_arr_r.time.values]} to create MVC around target date {str(target.astype('datetime64[D]'))}...")
+        # logger.info(f"Using {[str(t.astype('datetime64[D]')) for t in masked_arr_l.time.values]} and {[str(t.astype('datetime64[D]')) for t in masked_arr_r.time.values]} to create MVC around target date {str(target.astype('datetime64[D]'))}...")
                 
         mvc_partial = get_mvc(target, masked_arr_l, masked_arr_r)
         mvc = xr.concat([mvc, mvc_partial], dim="time") if mvc is not None else mvc_partial
@@ -78,15 +84,7 @@ def transform(ndvi_xarrays: list[xr.DataArray], target_times: np.ndarray, aoi: P
     interp_composite = mvc.interp(time=target_times, method="linear")
     logger.info("Interpolated dekadal NDVI composite obtained successfully!")
     
-    # Check for gaps in the dekadal composite and
-    # fill them using lower-resolution CLMS product
-    
-    gaps = []
-    for t in interp_composite.time.values:
-        if np.all(np.isnan(interp_composite.sel(time=t).values)):
-            logger.info(f"Gap detected for dekadal {str(t.astype('datetime64[D]'))}. Will attempt to fill using CLMS data.")
-            gaps.append(t)
-            
+    # fill gaps in composite using lower-resolution CLMS product 
     if gaps:
         interp_composite = fill_gaps(gaps, interp_composite, aoi, bbox)
     
