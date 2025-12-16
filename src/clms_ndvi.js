@@ -1,6 +1,6 @@
 //VERSION=3
-const factor = 1 / 250; 
-const offset = -0.08; 
+const factor = 1 / 125; 
+const offset = -1.0; 
 
 function setup() {
   return {
@@ -19,6 +19,7 @@ function evaluatePixel(samples) {
   
   var originalValue = samples.NDVI;
 
+  // Adjust to [-1, 1] range
   let val = originalValue * factor + offset;
 
   let dataMask = samples.dataMask;

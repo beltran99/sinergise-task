@@ -108,11 +108,9 @@ def fill_gaps(gaps: list[np.datetime64], composite: xr.DataArray, aoi: Path, bbo
     xarrays = process_clms_responses(responses, target_dekadals, bbox)
     clms_xarray = xr.concat(xarrays, dim="time")
     
-    factor = 1 / 250.0
-    offset = -0.08
     for gap in gaps:
         glogger.info(f"Filling gap for dekadal {str(gap.astype('datetime64[D]'))} using CLMS data...")
-        clms_data = clms_xarray.sel(time=gap, band=2) * factor + offset
+        clms_data = clms_xarray.sel(time=gap)
         composite.loc[dict(time=gap)] = clms_data
         
     return composite

@@ -462,7 +462,7 @@ def get_CDSE_request(token: dict, evalscript: str, collection_id: str, bbox: BBo
             'height': bbox_size[1],
             'responses': [
                 {
-                    'identifier': 'default',
+                    'identifier': 'index',
                     'format': {
                         'type': 'image/tiff',
                     }
