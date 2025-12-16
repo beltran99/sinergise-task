@@ -3,8 +3,8 @@ function setup () {
     return {
         input : [
             {
-                bands: ["B04", "B08", "CLM"],
-                units: ["REFLECTANCE", "REFLECTANCE", "DN"]
+                bands: ["B04", "B08", "CLM", "dataMask"],
+                units: ["REFLECTANCE", "REFLECTANCE", "DN", "DN"]
             }
         ],
         output: {
@@ -14,7 +14,7 @@ function setup () {
     };
 }
 function evaluatePixel(sample) {
-  if (sample.CLM == 1) {
+  if ((sample.CLM === 1) || (sample.dataMask === 0)) {
     return [NaN];
   }
   let ndvi = index(sample.B08, sample.B04);

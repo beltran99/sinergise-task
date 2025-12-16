@@ -48,9 +48,16 @@ def transform(ndvi_xarrays: list[xr.DataArray], target_times: np.ndarray, aoi: P
     """
     global glogger
     glogger = logger
+    
+    # Neglect scenes with more than 10% missing data
+    filtered_ndvi_xarrays = [
+        xarr
+        for xarr in ndvi_xarrays
+        if (np.count_nonzero(np.isnan(xarr.values)) / xarr.values.size) < 0.1
+    ]
 
     # Combine all xarrays into a single one
-    ndvi = xr.concat(ndvi_xarrays, dim="time")
+    ndvi = xr.concat(filtered_ndvi_xarrays, dim="time")
     ndvi = ndvi.sortby("time")
     
     nan_count = np.count_nonzero(np.isnan(ndvi.values))
