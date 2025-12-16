@@ -447,7 +447,7 @@ def get_CDSE_request(token: dict, evalscript: str, collection_id: str, bbox: BBo
             },
             'data': [
                 {
-                    'type': 'byoc-ab0e1e8e-508c-4faa-9b5b-c9c4734ef29e',
+                    'type': collection_id,
                     'dataFilter': {
                         'timeRange': {
                             'from': f'{time_interval[0]}T00:00:00Z',
