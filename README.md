@@ -52,7 +52,9 @@ python3 -m task1 --aoi data/input/myAOI.geojson --start 2025-01-01 --end 2025-09
 ```
 
 ### Pipeline output
-The resulting interpolated NDVI composite time series is written to disk in NetCDF and GeoTIFF formats in the [output](data/output/) directory. Additionally, a plot showing the NVDI evolution over time is generated.
+The resulting interpolated NDVI composite time series is written to disk in NetCDF and GeoTIFF formats in the [output](data/output/) directory. Additionally, a plot showing the NVDI evolution over time is generated, like in the following example:
+
+![ndvi composite](data/output/ndvi_composite.png)
 
 ### Code structure
 The pipeline source code is structured as follows:
